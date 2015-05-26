@@ -1,0 +1,84 @@
+html {
+  box-sizing: border-box;
+  background: url('tictactoebg.gif') no-repeat center center fixed; 
+  background-size: cover;
+}
+h1 {
+  font-family: Helvetica, sans-serif;
+  color: white;
+  text-align: center;
+}
+
+
+#status .o, #status .x {
+  display: none;
+}
+
+
+#current_move {
+  display: none;
+}
+
+td {
+  width: 180px;  
+  height: 180px;
+  border: 2px solid white;
+  color: white;
+  font-size: 4em;
+  text-align: left;
+  font-family: sans-serif;
+}
+table {
+  margin: 0 auto;
+}
+td.x {
+  margin: 0 auto;
+}
+td.o {
+    margin: 0 auto;
+
+}
+
+
+
+#x-wins {
+  background-color: rgba(0,0,0,0.5);
+  font-family: sans-serif;
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  width:100%;
+  height: 100%;
+  display: none;
+  color: white;
+}
+
+h3 {
+  margin-top: 25%;
+}
+
+
+#o-wins {
+  background-color: rgba(0,0,0,0.5);
+  font-family: sans-serif;
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  width:100%;
+  height: 100%;
+  display: none;
+  color: white;
+}
+
+
+#no-wins {
+  background-color: rgba(0,0,0,0.5);
+  font-family: sans-serif;
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  width:100%;
+  height: 100%;
+  display: none;
+  color: white;
+}

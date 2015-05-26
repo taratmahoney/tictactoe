@@ -1,0 +1,121 @@
+Google Maps, config management, ruby in JS, & OAUTH
+
+# Google Maps
+- Adding maps to the show page on SeatYourself
+- Google Maps for Rails gem
+- Get an API key by creating a new project in the Google developer's console
+- Select Google Maps Javascript API and click 'enable'
+- Create a 'browser key' - this will allow google to start tracking the website its running on
+- Grab the API & tack it on the the new JS file you will include in your HTML
+- Make sure to include this at the top of your asset pipeline - after CSS but before the rest of your JS
+
+# Configuration Management
+- Figaro is a gem that will help you manage your dev & production environment API keys
+- Things like your S3 key (AWS place where you can store all your files) should not be public, and Figaro helps you hide these
+- installing figaro creates an application.yml file and adds it to your .gitignore so its not included in your github repo
+- if you are working in a group, everyone will have to install their own version of figaro
+- you can specificy whether an API key is for dev or prod with development: and production: in your application.yml file
+- then you can call the key something like (env.google_maps_api) and reference it in your HTML file
+- if you're using figaro, it plays well with heroku
+- Heroku needs to know about your env variables to work, but you can define them for figaro and it will integrate properly
+- you'll need to create a new instance of a google maps object with JS and to give it a div in HTML
+- constructor function & initialization function using prototype style (which is essentially extending the function and is the same as initializing it in the constructor function):
+    
+    function Map(mapElem) {
+    this.mapElem = mapElem;
+    this.markers = [];
+    }
+
+    Map.prototype.init = function(){
+     var options = {
+      center: {lat: latitude, lng: longitude},
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP // find all this info in the tutorial
+     };
+
+     this.canvas = new google.maps.Map)this.mapElem, options);
+    }
+
+    // Define a function to add a marker to show where you're going
+
+    Map.prototype.addMarker = function(latitude, longitude){
+      var options = {
+      position: { lat: latitude, lng: londitude},
+      map: this.canvas
+      }
+
+    var myMarker = new google.maps.Marker(options);
+    this.markers.push(myMarker);
+    }
+
+    // Define a function to remove a marker
+
+    Map.prototype.removeMarker = function(marker) {
+      marker.setMap(null);
+      
+      // to delete it from our array, find the index of the marker and splice it from your array
+  
+      var index = this.marker.indexOf(marker);
+      this.markers.splice(index.1);
+    }
+
+
+    --------------------------- Time to get all this stuff working ------
+
+    $(document).on('ready page:load', function() {
+     if ($('#map-canvas').length){    // if it has a length, it exists
+     var customImage = 'www.imagelink.com'
+     window.myMap = new Map($('#map-canvas')[0]) 
+     // turns jquery element into a DOM element since Google Maps doesn't know jQuery //
+     myMap.init(window.latitude, window.longitude);
+
+     myMap.addMarker(window.latitude, window.longitude);
+
+     if (window.nearbys) {
+     nearbys.forEach (function(coord) {
+      myMap.addMarker(parseFloat(coord.latitude), parseFloat)
+     }
+     }
+
+     }
+    });
+
+    // Define a function to add a marker to show where you're going
+
+# Passing Ruby values to JavaScript
+
+- Different then responsing to server requests, this needs to happen all at once
+- One way to do this is to pass data attributes on HTML elements
+  
+  <div id="map-canvas" data-latitude="<%= @restaurant.latitude.to_f %>" data-longitude="<%= @restaurant.longitude.to_f %>" >
+
+  * In this case, you have to create vars for lat & long in the map.Init
+
+ - You can also just set JS variables in show.html:
+  <%= javascript_tag do %>
+    window.latitude = <%= @restaurant.latitude.to_f %>
+    window.latitude = <%= @restaurant.longitude.to_f %>
+  <% end %>
+
+  - to set up nearby restaurants
+
+  <%= javascript_tag do %>
+    window.nearbys = raw @nearby_restaurants.map { |nr| {latitude: nr.latitude, longitude: nr.longitude} }.to_json
+  <% end %>
+
+  
+
+  // This makes the objects able to be passed to JS as an object
+
+
+# OAuth with Sorcery
+- A protocol that lets you authenticate through a third party 
+- sorcery core migration, sorcery external migration (keeps track of which user is authenticated with which service)
+- Should then have a user model & authentication model
+- uncomment external providers and pass through any of the viable options
+- you need a key & a secret to be properly authenticated, as well as a callback url (where github sends you when its ready), and user info mapping
+- you can get the first three by setting this up with the app you want to integrate this with
+- make sure you put your key and secret to figaro in the application.yml file
+- 
+
+
